@@ -1,0 +1,21 @@
+---
+
+- name: Ensure cron is installed
+  apt:
+    pkg: cron
+    state: present
+  tags:
+    - cron
+
+- name: Ensure Cron is running
+  service:
+    name: cron
+    state: started
+    enabled: yes
+  tags:
+    - cron
+
+- include: jobs.yml
+  tags:
+    - cron
+
