@@ -1,30 +1,17 @@
 ---
 
-- cron:
-    name: "Run Magento for group Always"
-    job: "test ! -e {{ deploy_dir }}/maintenance.flag && /bin/bash {{ deploy_dir }}/scheduler_cron.sh --mode always"
-    cron_file: magento-always
-    user: "{{ web_user }}"
-  notify: restart cron
-
-- cron:
-    name: "Run Magento for group Default"
-    job: "test ! -e {{ deploy_dir }}/maintenance.flag && /bin/bash {{ deploy_dir }}/scheduler_cron.sh --mode default --excludeGroups marketing_emails"
-    cron_file: magento-default
-    user: "{{ web_user }}"
-  notify: restart cron
-
-- cron:
-    name: "Run Campaign Monitor group"
-    job: "test ! -e {{ deploy_dir }}/maintenance.flag && /bin/bash {{ deploy_dir }}/scheduler_cron.sh --mode default --includeGroups marketing_emails"
-    cron_file: campaign-monitor
-    user: "{{ web_user }}"
-  notify: restart cron
-
-- cron:
-    name: "Run Magento watcher"
-    job: "test ! -e {{ deploy_dir }}/maintenance.flag && cd {{ deploy_dir }}/shell && /usr/bin/php scheduler.php --action watchdog"
-    user: "{{ web_user }}"
-    cron_file: magento-watcher
-    minute: "*/10"
+# Loop over all cron_jobs
+- name: Setup Cron Jobs
+  become: yes
+  cron:
+    name: "{{ item.name }}"
+    job: "{{ item.job }}"
+    cron_file: "{{ item.file }}"
+    user: "{{ item.user | default('root')}}"
+    minute: "{{ item.minute | default('*') }}"
+    hour: "{{ item.hour | default('*') }}"
+    day: "{{ item.dat | default('*') }}"
+    weekday: "{{ item.week | default('*') }}"
+    month: "{{ item.month | default('*') }}"
+  with_items: "{{ cron_jobs | list | unique }}"
   notify: restart cron
