@@ -1,0 +1,8 @@
+---
+
+- hosts: all
+
+  roles:
+    - cron
+  tags:
+    - case-1
