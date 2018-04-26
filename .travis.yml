@@ -1,21 +1,29 @@
 ---
 
-sudo: required
+#sudo: required
 
 env:
   - distro: ubuntu1604
-    init: /lib/systemd/systemd
-    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+#    init: /lib/systemd/systemd
+#    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
-services:
-  - docker
-
-before_install:
-  - 'docker pull geerlingguy/docker-${distro}-ansible:latest'
+#services:
+#  - docker
 
 script:
-  - container_id=${mktemp)
-  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/cron:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
+  - chmod +x ${PWD}/tests/test.sh
+
+  # Run tests.
+  - ${PWD}/tests/test.sh
+
+before_install:
+#  - 'docker pull geerlingguy/docker-${distro}-ansible:latest'
+
+script:
+#  - container_id=${mktemp)
+#  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/cron:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
 
 # Test Syntax
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/cron/tests/test.yml --syntax-check'
+#  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/cron/tests/test.yml --syntax-check'
