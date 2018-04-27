@@ -1,33 +1,33 @@
 ---
 
 sudo: required
-language: minimal
 
-env:
-  - distro: ubuntu1604
-    - init="/lib/systemd/systemd"
-    - opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    - red='\033[0;31m'
-    - green='\033[0;32m'
-    - neutral='\033[0m'
-    - container_id=$(date +%s)
-    - role_dir=${role_dir:-"$PWD"}
+language: minimal
 
 services:
   - docker
 
 before_install:
-  - 'docker pull geerlingguy/docker-${distro}-ansible:latest'
-  - 'docker run --detach --volume="$role_dir":/etc/ansible/roles/role_under_test:rw --name $container_id $opts geerlingguy/docker-$distro-ansible:latest $init'
+  # Set some vars
+  - export container_id=$(date +%s)
+  - export init="/lib/systemd/systemd"
+  - export opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+  - export red='\033[0;31m'
+  - export green='\033[0;32m'
+  - export neutral='\033[0m'
+  # Deal with docker
+  - docker pull geerlingguy/docker-ubuntu1604-ansible:latest
+  - docker run --detach --name $container_id $opts geerlingguy/docker-ubuntu1604-ansible:latest $init'
+  - docker ps -a
+
 
 script:
-  - PWD
-  - ls
+  # Test Syntax
+  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $PWD/roles/cron/tests/test.yml --syntax-check'
 
 
 #script:
 #  - container_id=${mktemp)
 #  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/cron:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
 
-# Test Syntax
-#  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/cron/tests/test.yml --syntax-check'
+
