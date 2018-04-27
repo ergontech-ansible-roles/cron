@@ -12,17 +12,19 @@ services:
   - docker
 
 script:
-  # Download test shim.
+  # Configure test script so we can run extra tests after playbook is run.
+
+
   - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
   - chmod +x ${PWD}/tests/test.sh
 
   # Run tests.
   - ${PWD}/tests/test.sh
 
-before_install:
+#before_install:
 #  - 'docker pull geerlingguy/docker-${distro}-ansible:latest'
 
-script:
+#script:
 #  - container_id=${mktemp)
 #  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/cron:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
 
