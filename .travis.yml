@@ -17,13 +17,13 @@ before_install:
   - export neutral='\033[0m'
   # Deal with docker
   - docker pull geerlingguy/docker-ubuntu1604-ansible:latest
-  - docker run --detach --name $container_id $opts geerlingguy/docker-ubuntu1604-ansible:latest $init'
+  - docker run --detach --name $container_id $opts geerlingguy/docker-ubuntu1604-ansible:latest $init
   - docker ps -a
 
 
 script:
   # Test Syntax
-  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $PWD/roles/cron/tests/test.yml --syntax-check'
+  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $PWD/roles/cron/tests/test.yml --syntax-check
 
 
 #script:
