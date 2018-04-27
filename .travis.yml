@@ -23,7 +23,7 @@ before_install:
 
 script:
   # Test Syntax
-  - docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook $PWD/tests/test.yml --syntax-check
+  - docker exec --tty ${container_id}) env TERM=xterm ansible-playbook $PWD/tests/test.yml --syntax-check
 
 
 #script:
