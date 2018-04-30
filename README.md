@@ -10,6 +10,7 @@ Role Variables
 --------------
 
 ```
+# Vars
 cron_jobs
 
 # Required Keys
