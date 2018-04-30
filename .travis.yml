@@ -9,4 +9,5 @@ services:
 
 script:
   # Run Test Script
+  - chmod +x ${PWD}/tests/test.sh
   - ${PWD}/tests/test.sh
