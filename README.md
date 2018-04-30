@@ -1,14 +1,23 @@
+[![Build Status](https://travis-ci.org/ergontech-ansible-roles/cron-role.svg?branch=master)](https://travis-ci.org/ergontech-ansible-roles/cron-role)
+
 Cron Role
 =========
 
-Installs and configures a Cron service
+Installs and configures a Cron service. Creates a file in /etc/cron.d for each
 
 
 Role Variables
 --------------
 
 ```
-# Defaults
+cron_jobs
+
+# Required Keys
+name
+job
+file
+
+# Default Key Values
 user    -> root
 minute  -> *
 hour    -> *
@@ -20,16 +29,16 @@ month   -> *
 ```
 # Example
 cron_jobs:
-  - magento_main:
+  - main_job:
     job: echo test
     name: test1
-    file: magento-main
+    file: main-job
     user: www-data
     minute: 1
-  - magento_default
-    job: echo magento
-    name: magento
-    file: magento-default
+  - secondary_job
+    job: echo 'another test'
+    name: second-job
+    file: test-file
 ```
 
 
