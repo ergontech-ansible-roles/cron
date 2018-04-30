@@ -11,19 +11,18 @@ before_install:
   # Set some vars
   - export container_id=$(date +%s)
   - export init="/lib/systemd/systemd"
-  - export opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
   - export red='\033[0;31m'
   - export green='\033[0;32m'
   - export neutral='\033[0m'
   # Deal with docker
   - docker pull geerlingguy/docker-ubuntu1604-ansible:latest
-  - docker run --detach --name $container_id $opts geerlingguy/docker-ubuntu1604-ansible:latest $init
+  - docker run --detach -v ${PWD}:/etc/ansible/roles/cron  --name $container_id --privileged geerlingguy/docker-ubuntu1604-ansible:latest $init
   - docker ps -a
 
 
 script:
   # Test Syntax
-  - docker exec --tty ${container_id} env TERM=xterm ansible-playbook $PWD/tests/test.yml --syntax-check
+  - docker exec --tty ${container_id} env TERM=xterm ansible-playbook /etc/ansible/roles/cron/tests/test.yml --syntax-check
 
 
 #script:
