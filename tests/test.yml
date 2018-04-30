@@ -2,4 +2,4 @@
 
 - hosts: all
   roles:
-    - cron
+    - role_under_test
