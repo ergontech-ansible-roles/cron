@@ -14,6 +14,8 @@ script:
   - ${PWD}/tests/test.sh
 
   # Test Cron Files Exists
+  - ls /etc
+  - ls -la /etc/cron.d
   - test -f /etc/cron.d/main-job
   - test -f /etc/cron.d/test-file
 
