@@ -9,7 +9,7 @@ services:
 
 script:
   # Download and Run Base Test Script
-  - wget -O https://raw.githubusercontent.com/ergontech-ansible-roles/role-development-toolkit/master/scripts/base-tests.sh $PWD/tests/test.sh
+  - wget -O $PWD/tests/test.sh https://raw.githubusercontent.com/ergontech-ansible-roles/role-development-toolkit/master/scripts/base-tests.sh
   - chmod +x $PWD/tests/test.sh
   - ${PWD}/tests/test.sh
 
