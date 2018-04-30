@@ -14,6 +14,7 @@ before_install:
   - export red='\033[0;31m'
   - export green='\033[0;32m'
   - export neutral='\033[0m'
+  - export playbook='test.yml'
   # Deal with docker
   - docker pull geerlingguy/docker-ubuntu1604-ansible:latest
   - docker run --detach -v ${PWD}:/etc/ansible/roles/cron  --name $container_id --privileged geerlingguy/docker-ubuntu1604-ansible:latest $init
@@ -22,11 +23,20 @@ before_install:
 
 script:
   # Test Syntax
+  - printf ${green}"Checking Ansible playbook syntax."${neutral}
   - docker exec --tty ${container_id} env TERM=xterm ansible-playbook /etc/ansible/roles/cron/tests/test.yml --syntax-check
 
+  # Run Ansible playbook.
+  - printf ${green}"Running command: docker exec $container_id env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/$playbook"${neutral}
+  - docker exec $container_id env TERM=xterm env ANSIBLE_FORCE_COLOR=1 ansible-playbook /etc/ansible/roles/cron/tests/$playbook
 
-#script:
-#  - container_id=${mktemp)
-#  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/cron:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
-
+  # Run Ansible playbook again (idempotence test).
+  - printf ${green}"Running playbook again: idempotence test"${neutral}
+  - idempotence=$(mktemp)
+  - docker exec $container_id ansible-playbook /etc/ansible/roles/role_under_test/tests/$playbook | tee -a $idempotence
+  - >
+      tail $idempotence \
+      | grep -q 'changed=0.*failed=0' \
+      && (printf ${green}'Idempotence test: pass'${neutral}"\n") \
+      || (printf ${red}'Idempotence test: fail'${neutral}"\n" && exit 1)
 
