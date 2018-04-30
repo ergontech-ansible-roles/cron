@@ -8,6 +8,14 @@ services:
   - docker
 
 script:
-  # Run Test Script
-  - chmod +x ${PWD}/tests/test.sh
+  # Download and Run Base Test Script
+  - wget -O https://raw.githubusercontent.com/ergontech-ansible-roles/role-development-toolkit/master/scripts/base-tests.sh $PWD/tests/test.sh
+  - chmod +x $PWD/tests/test.sh
   - ${PWD}/tests/test.sh
+
+  # Test Cron Files Exists
+  - test -f /etc/cron.d/main-job
+  - test -f /etc/cron.d/second-job
+
+  # Test Cron is running
+  - /etc/init.d/cron status

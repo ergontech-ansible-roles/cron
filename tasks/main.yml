@@ -20,4 +20,3 @@
 - include: jobs.yml
   tags:
     - cron
-

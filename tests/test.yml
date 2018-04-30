@@ -4,7 +4,21 @@
 
   pre_tasks:
     - name: Update apt cache.
-      apt: update_cache=yes cache_valid_time=600
+      apt:
+        update_cache: yes
+
+  vars:
+    cron_jobs:
+      - main_job:
+        job: echo test
+        name: test1
+        file: main-job
+        user: www-data
+        minute: 1
+      - secondary_job
+        job: echo 'another test'
+        name: second-job
+        file: test-file
 
   roles:
     - role_under_test
