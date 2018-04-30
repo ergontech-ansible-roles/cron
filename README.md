@@ -35,7 +35,7 @@ cron_jobs:
     file: main-job
     user: www-data
     minute: 1
-  - secondary_job
+  - secondary_job:
     job: echo 'another test'
     name: second-job
     file: test-file
