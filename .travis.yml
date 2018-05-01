@@ -7,15 +7,24 @@ language: minimal
 services:
   - docker
 
-before_script:
+before_install:
   # Set some vars
   - export container_id='test-role-container'
+  - export distro="ubuntu1604"
+  - export init="/lib/systemd/systemd"
+  - export opts="--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
-script:
-  # Download and Run Base Test Script
+  # Run the container using the supplied OS.
+  - docker pull geerlingguy/docker-$distro-ansible:latest
+  - docker run --detach --volume="$role_dir":/etc/ansible/roles/test-role/tests --name $container_id $opts geerlingguy/docker-$distro-ansible:latest $init
+
+before_script:
+  # Download and Base Test Script
   - wget -O $PWD/tests/test.sh https://raw.githubusercontent.com/ergontech-ansible-roles/role-development-toolkit/master/scripts/base-tests.sh
   - chmod +x $PWD/tests/test.sh
-  - ${PWD}/tests/test.sh
+script:
+  # Run Base Test Script
+  - ${PWD}/tests/test.sh -id $container_id
 
   # Test Cron Files Exists
   - docker exec $container_id test -f /etc/cron.d/main-job
@@ -26,5 +35,4 @@ script:
 
 after_script:
   # Remove the Docker container
-  - printf "Removing Docker container...\n"
   - docker rm -f $container_id
