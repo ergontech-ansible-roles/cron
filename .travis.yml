@@ -7,10 +7,11 @@ language: minimal
 services:
   - docker
 
-script:
+before_script:
   # Set some vars
   - export container_id='test-role-container'
 
+script:
   # Download and Run Base Test Script
   - wget -O $PWD/tests/test.sh https://raw.githubusercontent.com/ergontech-ansible-roles/role-development-toolkit/master/scripts/base-tests.sh
   - chmod +x $PWD/tests/test.sh
@@ -22,3 +23,8 @@ script:
 
   # Test Cron is running
   - docker exec $container_id /etc/init.d/cron status
+
+after_script:
+  # Remove the Docker container
+  - printf "Removing Docker container...\n"
+  - docker rm -f $container_id
