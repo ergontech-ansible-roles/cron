@@ -22,4 +22,4 @@
         file: test-file
 
   roles:
-    - role_under_test
+    - test-role
