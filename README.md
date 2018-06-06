@@ -49,7 +49,7 @@ Use Role
 ```
 # requirments.yml
 
-- src: https://github.com/ergontech-ansible-roles/cron-role
+- src: https://github.com/ergontech-ansible-roles/cron
   version: master
   name: cron
 ```
