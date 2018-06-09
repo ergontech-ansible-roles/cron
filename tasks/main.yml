@@ -18,5 +18,6 @@
     - cron
 
 - include: jobs.yml
+  when: cron_jobs is defined
   tags:
     - cron
